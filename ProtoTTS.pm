@@ -90,7 +90,7 @@ sub play {
     my $self = shift;
 
     my $audio_url = $self->_get_audio_url;
-    my $audio_content = $self->_get_audio_content( $audio_url );
+    my $audio_content = $self->_get_page_content( $audio_url );
 
     return unless $audio_content;
 
@@ -148,25 +148,25 @@ sub _get_audio_url {
 
 # --------------------------------------------
 #
-#   Subroutine _GET_AUDIO_CONTENT
+#   Subroutine _GET_PAGE_CONTENT
 #
 # --------------------------------------------     
 #
 #   [Description]
 # 
-#   Gets the audio content from the specified URL.
+#   Gets the page content from the specified URL.
 #
 # --------------------------------------------
 #
 #   @param self -> object: 
-#   @param url -> string: the URL of the audio
+#   @param url -> string: URL
 #
-#   @return content -> string: audio content retrieved from the specified URL.
+#   @return content -> string: page content retrieved from the specified URL.
 #
 # --------------------------------------------
 
 
-sub _get_audio_content {
+sub _get_page_content {
 
     my $self = shift;
     my $url = shift;
