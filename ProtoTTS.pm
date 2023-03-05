@@ -16,7 +16,10 @@ use Audio::Play::MPG123;
 #
 # --------------------------------------------
 
-use constant TTS_SERVICE_URL => 'https://ttsmp3.com';
+use constant {
+    TTS_SERVICE_URL => 'https://ttsmp3.com',
+    MAX_CHARACTERS  => 3000
+};
 
 
 # --------------------------------------------
@@ -36,7 +39,7 @@ sub new {
     return bless {
 
         _message => '',
-        _voice   => 'Lucia',
+        _voice   => 'Kimberly',
         _source  => 'ttsmp3'
 
     }, $class;
@@ -49,7 +52,7 @@ sub set_message {
     my $self = shift;
     my $message = shift;
 
-    $self->{_message} = $message;
+    $self->{_message} = length $message > MAX_CHARACTERS ? substr($message, 0, MAX_CHARACTERS) : $message;
 
     return;
 
@@ -70,7 +73,7 @@ sub set_voice {
 
 # --------------------------------------------
 #
-#   Subroutine PLAY
+#   METHOD play
 #
 # --------------------------------------------     
 #
@@ -109,7 +112,7 @@ sub play {
 
 # --------------------------------------------
 #
-#   Subroutine _GET_AUDIO_URL
+#   METHOD _get_audio_url
 #
 # --------------------------------------------     
 #
@@ -148,7 +151,7 @@ sub _get_audio_url {
 
 # --------------------------------------------
 #
-#   Subroutine _GET_PAGE_CONTENT
+#   METHOD _get_page_content
 #
 # --------------------------------------------     
 #
@@ -181,7 +184,7 @@ sub _get_page_content {
 
 # --------------------------------------------
 #
-#   Subroutine LIST_SPEAKERS
+#   METHOD List_Speakers
 #
 # --------------------------------------------     
 #
