@@ -21,19 +21,6 @@ cpan LWP::Simple Audio::Play::MPG123
 
 ## Test
 
-```perl
-#!/usr/bin/perl
-
-use strict;
-use warnings;
-
-use lib '.';
-use ProtoTTS;
-
-
-my $prototts = ProtoTTS->new;
-$prototts->set_message('Prueba de voz Lucia.');
-$prototts->set_voice('Lucia');
-$prototts->play;
-
+```bash
+./test.pl
 ```

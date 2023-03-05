@@ -3,14 +3,30 @@ package ProtoTTS;
 use strict;
 use warnings;
 
-use JSON;
+use JSON qw(decode_json);
+use Encode qw(encode);
 use File::Temp;
 use LWP::UserAgent;
 use Audio::Play::MPG123;
 
 
+# --------------------------------------------
+#
+#   CONSTANTS
+#
+# --------------------------------------------
+
+use constant TTS_SERVICE_URL => 'https://ttsmp3.com';
+
+
+# --------------------------------------------
+#
+#   GLOBALS
+#
+# --------------------------------------------
 
 my $ua = LWP::UserAgent->new;
+
 
 
 sub new {
@@ -52,6 +68,23 @@ sub set_voice {
 }
 
 
+# --------------------------------------------
+#
+#   Subroutine PLAY
+#
+# --------------------------------------------     
+#
+#   [Description]
+# 
+#   Plays the audio generated from the specified message and voice.
+#
+# --------------------------------------------
+#
+#   @param self -> object
+#
+# --------------------------------------------
+
+
 sub play {
 
     my $self = shift;
@@ -74,6 +107,25 @@ sub play {
 }
 
 
+# --------------------------------------------
+#
+#   Subroutine _GET_AUDIO_URL
+#
+# --------------------------------------------     
+#
+#   [Description]
+# 
+#   Generates the audio URL from the specified message and voice.
+#
+# --------------------------------------------
+#
+#   @param self -> object
+#
+#   @return url -> string: URL of the audio generated from the message and voice.
+#
+# --------------------------------------------
+
+
 sub _get_audio_url {
 
     my $self = shift;
@@ -81,10 +133,10 @@ sub _get_audio_url {
     my $voice = $self->{_voice};
     my $source = $self->{_source};
 
-    my $ttsmp3_url = 'https://ttsmp3.com/makemp3_new.php';
+    my $url = sprintf '%s/makemp3_new.php', TTS_SERVICE_URL;
     my $data = "msg=$message&lang=$voice&source=$source";
 
-    my $response = $ua->post( $ttsmp3_url, Content => $data );
+    my $response = $ua->post( $url, Content => $data );
 
     my $ttsmp3_json = $response->is_success ? decode_json( $response->decoded_content ) : {};
 
@@ -92,6 +144,26 @@ sub _get_audio_url {
     return $ttsmp3_json->{URL};
 
 }
+
+
+# --------------------------------------------
+#
+#   Subroutine _GET_AUDIO_CONTENT
+#
+# --------------------------------------------     
+#
+#   [Description]
+# 
+#   Gets the audio content from the specified URL.
+#
+# --------------------------------------------
+#
+#   @param self -> object: 
+#   @param url -> string: the URL of the audio
+#
+#   @return content -> string: audio content retrieved from the specified URL.
+#
+# --------------------------------------------
 
 
 sub _get_audio_content {
@@ -103,6 +175,43 @@ sub _get_audio_content {
 
     return '' unless $response->is_success;
     return $response->decoded_content;
+
+}
+
+
+# --------------------------------------------
+#
+#   Subroutine LIST_SPEAKERS
+#
+# --------------------------------------------     
+#
+#   [Description]
+# 
+#   Gets a list of available voices from a TTS service
+#
+# --------------------------------------------
+#
+#   @return voices -> arrayref: voices available in the TTS service.
+#
+# --------------------------------------------
+
+
+sub List_Speakers {
+
+    my $response = $ua->get( TTS_SERVICE_URL );
+
+    return unless $response->is_success;
+
+    my $content = $response->decoded_content;
+
+    my $voices = [];
+
+    while ( $content =~ m/<option[^>]*>(.+?)<\/option>/ig ){
+        my $voice = encode( 'utf-8', $1);
+        push @$voices, $voice;
+    }
+
+    return $voices;
 
 }
 
