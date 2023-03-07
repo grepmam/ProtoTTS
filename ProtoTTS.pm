@@ -6,6 +6,7 @@ use warnings;
 use JSON qw(decode_json);
 use Encode qw(encode);
 use File::Temp;
+
 use LWP::UserAgent;
 use Audio::Play::MPG123;
 
@@ -52,7 +53,8 @@ sub set_message {
     my $self = shift;
     my $message = shift;
 
-    $self->{_message} = length $message > MAX_CHARACTERS ? substr($message, 0, MAX_CHARACTERS) : $message;
+    $self->{_message} = length $message > MAX_CHARACTERS ? substr $message, 0, MAX_CHARACTERS : $message;
+    $self->{_message} = encode 'utf-8', $self->{_message};
 
     return;
 
@@ -141,7 +143,7 @@ sub _get_audio_url {
 
     my $response = $ua->post( $url, Content => $data );
 
-    my $ttsmp3_json = $response->is_success ? decode_json( $response->decoded_content ) : {};
+    my $ttsmp3_json = $response->is_success ? decode_json $response->decoded_content : {};
 
     return '' unless $ttsmp3_json;
     return $ttsmp3_json->{URL};
@@ -210,7 +212,7 @@ sub List_Speakers {
     my $voices = [];
 
     while ( $content =~ m/<option[^>]*>(.+?)<\/option>/ig ){
-        my $voice = encode( 'utf-8', $1);
+        my $voice = encode 'utf-8', $1;
         push @$voices, $voice;
     }
 
