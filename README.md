@@ -19,8 +19,8 @@ sudo apt install mpg123
 cpan LWP::Simple Audio::Play::MPG123
 ```
 
-## Test
+## Run
 
 ```bash
-./test.pl
+./prototts -h
 ```
