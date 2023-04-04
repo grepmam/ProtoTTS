@@ -251,8 +251,11 @@ sub _get_speakers {
 sub list_langs {
 
     my $self = shift;
-    my @langs = keys %{$self->_get_speakers};
+    my $speakers = $self->_get_speakers;
 
+    return unless $speakers;
+
+    my @langs = keys %$speakers;
     foreach my $lang (@langs){ print "$lang\n"; }
 
     return;
@@ -286,6 +289,8 @@ sub list_voices {
     my $lang = shift;
 
     my $speakers = $self->_get_speakers;
+
+    return unless $speakers;
 
     if ( ! exists $speakers->{$lang} ){
         print "Language does not exist\n";
