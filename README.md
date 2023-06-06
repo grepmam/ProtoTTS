@@ -16,7 +16,7 @@ ProtoTTS is a small module for converting text to speech. It uses TTSMP3 as a ba
 
 ```bash
 sudo apt install mpg123
-cpan LWP::UserAgent Audio::Play::MPG123 JSON
+cpan LWP::UserAgent Audio::Play::MPG123 JSON IO::Socket::SSL IO::Socket::SSL::Utils LWP::Protocol::https
 ```
 
 ## Run
