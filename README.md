@@ -15,12 +15,36 @@ ProtoTTS is a small module for converting text to speech. It uses TTSMP3 as a ba
 ## Install dependencies
 
 ```bash
-sudo apt install mpg123
-cpan LWP::UserAgent Audio::Play::MPG123 JSON IO::Socket::SSL IO::Socket::SSL::Utils LWP::Protocol::https
+sudo apt install mpv
+cpan LWP::UserAgent JSON IO::Socket::SSL IO::Socket::SSL::Utils LWP::Protocol::https
 ```
 
-## Run
+## Test Script
 
-```bash
-./prototts -h
+#### Play message
+
+```perl
+use ProtoTTS;
+
+my $prototts = ProtoTTS->new;
+$prototts->set_message( 'This is a test' );
+$prototts->play;
+```
+
+#### Change voice
+
+```perl
+$prototts->set_voice( 'Lucia' );
+```
+
+#### List voices
+
+```perl
+ProtoTTS->List_Voices( 'US English' );
+```
+
+#### List languages
+
+```perl
+ProtoTTS->List_Langs;
 ```
