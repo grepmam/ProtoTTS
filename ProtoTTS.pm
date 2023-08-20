@@ -147,7 +147,7 @@ sub _create_tempfile {
 
     my ( $self, $filename, $content ) = @_;
 
-    open( my $fh, '>', $filename ) or die "\n";
+    open( my $fh, '>', $filename ) or die "Could not create file\n";
     print $fh $content;
     close $fh;
 
